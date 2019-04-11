@@ -15,7 +15,7 @@
 添加依赖项
 
 	dependencies {
-		implementation 'com.github.User:Repo:Tag'
+		implementation 'com.github.KevinYou128:HotHeart:v1.0'
 	}
   
 # XML属性说明
