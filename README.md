@@ -33,8 +33,8 @@
 <p> setOnDoubleClickListener：双击事件监听<br />
 <br />
  示例：
-
-heartViewGroup.setOnDoubleClickListener(new HeartViewGroup.DoubleClickListener() {
+		
+	heartViewGroup.setOnDoubleClickListener(new HeartViewGroup.DoubleClickListener() {
             @Override
             public void onDoubleClick(View view) {
                 //双击事件处理
