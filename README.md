@@ -21,8 +21,8 @@
 # XML属性说明
 swipe_image：点击时需要显示的图片
 refresh_rate：设置动画刷新频率，默认为16，数值越大动画表现越慢，建议使用默认就好了
-degrees_interval_min：图片最小旋转角度，默认-30，取值范围为-360~360（注意取值小于或等于max）
-degrees_interval_max:图片最大旋转角度，默认30，取值范围为-360~360（注意取值大于或等于min）
+degrees_interval_min：图片最小旋转角度，默认-30，取值范围为-360到360（注意取值小于或等于max）
+degrees_interval_max:图片最大旋转角度，默认30，取值范围为-360到360（注意取值大于或等于min）
 # java代码属性说明
 setOnDoubleClickListener：双击事件监听
 示例：
@@ -35,6 +35,6 @@ heartViewGroup.setOnDoubleClickListener(new HeartViewGroup.DoubleClickListener()
         
 setSwipeImage(int id)：设置点击时需要显示的图片
 setRefreshRate(int refreshRate)：设置动画刷新频率，默认为16，数值越大动画表现越慢，建议使用默认就好了
-setDegreesInterval(int min,int max)：设置图片旋转角度区间，默认-30~30
-min取值范围为-360~360（注意取值小于或等于max）
-max取值范围为-360~360（注意取值大于或等于min）
+setDegreesInterval(int min,int max)：设置图片旋转角度区间，默认-30到30
+min取值范围为-360到360（注意取值小于或等于max）
+max取值范围为-360到360（注意取值大于或等于min）
