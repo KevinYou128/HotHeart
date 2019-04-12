@@ -1,5 +1,5 @@
 # HotHeart
-模仿抖音APP双击屏幕蹦出心图，特点：   1. 可以自定义图片   2. 可以自定义旋转角度   3. 超级简洁，占用内存小
+抖音APP点赞效果实现，模仿抖音APP双击屏幕蹦出心图，特点：   1. 可以自定义图片   2. 可以自定义旋转角度   3. 超级简洁，占用内存小
 # 预览
 ![预览图片](https://github.com/KevinYou128/HotHeart/blob/master/app/src/main/res/drawable/douyin2.gif)
 # 使用
