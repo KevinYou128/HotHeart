@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="HeartViewGroup">
+    <declare-styleable name="HeartFrameLayout">
         <attr name="swipe_image" format="integer" />
         <attr name="refresh_rate" format="integer" />
         <attr name="degrees_interval_min" format="integer" />
