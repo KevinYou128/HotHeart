@@ -22,7 +22,7 @@ import java.util.Random;
 /***
  *
  *  抖音点击出现爱心的效果
- *  Created by YQW on 2019/4/11.
+ *  Created by YQW on 2019/4/12.
  */
 public class HeartViewGroup extends ViewGroup {
     DoubleClickListener mDoubleClickListener;
