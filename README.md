@@ -65,7 +65,7 @@
  setRefreshRate(int refreshRate)：设置动画刷新频率，默认为16，数值越大动画表现越慢，建议使用默认就好了<br />
  <br />
  setDegreesInterval(int min,int max)：设置图片旋转角度区间，默认-30到30<br />
-min取值范围为-360到360（注意取值小于或等于max）<br />
-max取值范围为-360到360（注意取值大于或等于min）</p>
+min取值范围为-360到360<br />
+max取值范围为-360到360</p>
 
 [博客地址](https://blog.csdn.net/you943047219/article/details/89239562)
