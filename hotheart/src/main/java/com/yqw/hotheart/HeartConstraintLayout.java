@@ -10,10 +10,10 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.os.Handler;
 import android.os.Message;
+import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.FrameLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,7 @@ import java.util.Random;
  *  抖音点击出现爱心的效果
  *  Created by YQW on 2019/4/12.
  */
-public class HeartFrameLayout extends FrameLayout {
+public class HeartConstraintLayout extends ConstraintLayout {
     DoubleClickListener mDoubleClickListener;
 
     List<HeartBean> list;
@@ -58,11 +58,11 @@ public class HeartFrameLayout extends FrameLayout {
         }
     }
 
-    public HeartFrameLayout(Context context) {
+    public HeartConstraintLayout(Context context) {
         super(context);
     }
 
-    public HeartFrameLayout(Context context, AttributeSet attrs) {
+    public HeartConstraintLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.HeartViewGroup);
         bitmap = BitmapFactory.decodeResource(getResources(), typedArray.getResourceId(R.styleable.HeartViewGroup_swipe_image, R.drawable.ic_heart));
