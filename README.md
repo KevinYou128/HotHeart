@@ -1,7 +1,7 @@
 # HotHeart
 模仿抖音APP双击屏幕蹦出心图，特点：   1. 可以自定义图片   2. 可以自定义旋转角度   3. 超级简洁，占用内存小
 # 预览
-![预览图片](https://github.com/KevinYou128/HotHeart/blob/master/app/src/main/res/drawable/Screenshot_20190312-183946.png)
+![预览图片](https://github.com/KevinYou128/HotHeart/blob/master/app/src/main/res/drawable/preview1.png)
 # 使用
  第一步：
  在项目根目录的build.gradle文件中加入
