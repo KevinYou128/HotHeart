@@ -19,6 +19,24 @@
 	dependencies {
 		implementation 'com.github.KevinYou128:HotHeart:v1.0'
 	}
+第三步：直接在布局文件里调用
+
+	<com.yqw.hotheart.HeartFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    	 xmlns:app="http://schemas.android.com/apk/res-auto"
+    	 xmlns:tools="http://schemas.android.com/tools"
+    	 android:layout_width="match_parent"
+    	 android:layout_height="match_parent"
+    	 app:degrees_interval_max="20"
+    	 app:degrees_interval_min="-20"
+    	 app:swipe_image="@drawable/ic_heart"
+    	 tools:context=".MainActivity">
+    	<ImageView
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:src="@drawable/douyin" />
+	</com.yqw.hotheart.HeartFrameLayout>
+直接在你的父布局外层包裹上hotheart布局就可以了，另外，考虑到缩减布局层数，我特意添加了HeartLinearLayout、HeartConstraintLayout、HeartRelativeLayout、HeartFrameLayout等父容器，你可以直接使用它们来替换你的原生布局，以达到缩减布局层数的效果。
+
 <h3>XML属性说明</h3>
 
 <p> swipe_image：点击时需要显示的图片<br />
