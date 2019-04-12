@@ -237,6 +237,12 @@ public class HeartViewGroup extends ViewGroup {
      * @return 整数
      */
     private int degrees(int min, int max) {
+        //若最小值大于最大值，则重新赋值正位
+        if (min > max) {
+            int x = min;
+            min = max;
+            max = x;
+        }
         Random random = new Random();
         return random.nextInt((max - min) + 1) + min;
     }
