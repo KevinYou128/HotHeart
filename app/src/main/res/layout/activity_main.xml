@@ -1,21 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.yqw.hotheart.HeartViewGroup xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
-<com.yqw.hotheart.HeartViewGroup
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:swipe_image="@drawable/ic_heart"
+    app:degrees_interval_max="20"
     app:degrees_interval_min="-20"
-    app:degrees_interval_max="20">
+    app:swipe_image="@drawable/ic_heart"
+    tools:context=".MainActivity">
+
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/douyin"/>
+        android:src="@drawable/douyin" />
 </com.yqw.hotheart.HeartViewGroup>
-
-
-</android.support.constraint.ConstraintLayout>
