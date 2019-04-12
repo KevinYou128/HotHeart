@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:degrees_interval_max="20"
-    app:degrees_interval_min="-20"
+    app:degrees_interval_max="-20"
+    app:degrees_interval_min="20"
     app:swipe_image="@drawable/ic_heart"
     tools:context=".MainActivity">
 

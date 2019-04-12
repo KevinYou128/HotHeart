@@ -27,8 +27,8 @@ import java.util.Random;
 public class HeartFrameLayout extends FrameLayout {
     DoubleClickListener mDoubleClickListener;
 
-    List<HeartBean> list;
-    int MaxAlpha = 255;//
+    List<HeartBean> list;//存放多个心形图
+    int MaxAlpha = 255;//透明度，默认为255，0为消失不可见
     boolean START = true;//true为开始动画，false为结束动画
     int refreshRate = 16;//动画刷新频率
     int degreesMin = -30;//最小旋转角度
@@ -37,7 +37,7 @@ public class HeartFrameLayout extends FrameLayout {
     Bitmap bitmap;//初始图片
     Matrix matrix = new Matrix();//控制bitmap旋转角度和缩放的矩阵
     int timeout = 400;//双击间格毫秒延时
-    long singleClickTime;
+    long singleClickTime;//记录第一次点击的时间
 
     @SuppressLint("HandlerLeak")
     class MyHandler extends Handler {
@@ -195,6 +195,12 @@ public class HeartFrameLayout extends FrameLayout {
      * @return 整数
      */
     private int degrees(int min, int max) {
+        //若最小值大于最大值，则重新赋值正位
+        if (min > max) {
+            int x = min;
+            min = max;
+            max = x;
+        }
         Random random = new Random();
         return random.nextInt((max - min) + 1) + min;
     }
@@ -207,7 +213,7 @@ public class HeartFrameLayout extends FrameLayout {
     }
 
     /**
-     * 给Button监听接口的方法
+     * 双击监听接口的方法
      *
      * @param mDoubleClickListener 双击监听
      */
