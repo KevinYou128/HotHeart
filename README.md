@@ -65,7 +65,7 @@
  
  方案一：
  
-    //点击监听方案一：解决单击和双击冲突的点击方案（解除注释就可以测试效果了）
+    //点击监听方案一：解决单击和双击冲突的点击方案
         heart.setOnTouchListener(new MyClickListener
                 (new MyClickListener.MyClickCallBack() {
 
@@ -81,7 +81,7 @@
                 }));
  方案二：
 
-     //点击监听方案二：普通单击双击，单击会一直被调用（解除注释就可以测试效果了）
+     //点击监听方案二：普通单击双击，单击会一直被调用
         heart.setOnDoubleClickListener(new DoubleClickListener() {
             @Override
             public void onDoubleClick(View view) {
