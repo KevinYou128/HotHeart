@@ -41,6 +41,7 @@ public class HeartFrameLayout extends FrameLayout {
     Matrix matrix = new Matrix();//控制bitmap旋转角度和缩放的矩阵
     int timeout = 400;//双击间格毫秒延时
     long singleClickTime;//记录第一次点击的时间
+    boolean isShake = true;//是否需要抖动效果 默认抖动
 
     @SuppressLint("HandlerLeak")
     class MyHandler extends Handler {
@@ -69,6 +70,7 @@ public class HeartFrameLayout extends FrameLayout {
         super(context, attrs);
         @SuppressLint("CustomViewStyleable") TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.HeartViewGroup);
         bitmap = BitmapFactory.decodeResource(getResources(), typedArray.getResourceId(R.styleable.HeartViewGroup_heart_swipe_image, R.drawable.ic_heart));
+        isShake = typedArray.getBoolean(R.styleable.HeartViewGroup_heart_shake, isShake);
         refreshRate = typedArray.getInt(R.styleable.HeartViewGroup_heart_refresh_rate, refreshRate);
         degreesMin = typedArray.getInt(R.styleable.HeartViewGroup_heart_degrees_interval_min, degreesMin);
         degreesMax = typedArray.getInt(R.styleable.HeartViewGroup_heart_degrees_interval_max, degreesMax);
@@ -186,11 +188,11 @@ public class HeartFrameLayout extends FrameLayout {
             } else if (START) {
                 START = false;
             }
-            if (bean.count <= 1) {
+            if (bean.count <= 1 && isShake) {
                 bean.scanle = 1.9f;//初始为1.9倍大小 步骤A
-            } else if (bean.count <= 6) {
+            } else if (bean.count <= 6 && isShake) {
                 bean.scanle -= 0.2;//每次缩小0.2，缩小5帧后为0.9 步骤B
-            } else if (bean.count <= 15) {
+            } else if (bean.count <= 15 && isShake) {
                 bean.scanle = 1;//恢复原图大小 步骤C ABC三个步骤主要实现一个初始跳动心心的效果
             } else {
                 bean.scanle += 0.1;//放大倍数 每次放大0.1
@@ -202,6 +204,7 @@ public class HeartFrameLayout extends FrameLayout {
             bean.paint.setAlpha(bean.alpha);
         }
     }
+
     /**
      * 生成一个随机整数
      *
@@ -219,6 +222,7 @@ public class HeartFrameLayout extends FrameLayout {
         Random random = new Random();
         return random.nextInt((max - min) + 1) + min;
     }
+
     /**
      * 单击接口监听的方法
      *
@@ -246,6 +250,15 @@ public class HeartFrameLayout extends FrameLayout {
      */
     public void setSwipeImage(int id) {
         bitmap = BitmapFactory.decodeResource(getResources(), id);
+    }
+
+    /**
+     * 设置是否抖动一下
+     *  默认抖动
+     * @param isShake true为抖动
+     */
+    public void setShake(boolean isShake) {
+        this.isShake = isShake;
     }
 
     /**
@@ -283,5 +296,4 @@ public class HeartFrameLayout extends FrameLayout {
         matrix = null;
         list = null;
     }
-
 }

@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
-import com.yqw.hotheart.HeartFrameLayout;
-
 public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("ClickableViewAccessibility")
@@ -14,7 +12,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        HeartFrameLayout heartFrameLayout = findViewById(R.id.heart);
+//        HeartFrameLayout heartFrameLayout = findViewById(R.id.heart);
 
 //        //点击监听方案一：解决单击和双击冲突的点击方案（解除注释就可以测试效果了）
 //        heartFrameLayout.setOnTouchListener(new MyClickListener

@@ -42,6 +42,7 @@ public class HeartViewGroup extends ViewGroup {
     Matrix matrix = new Matrix();//控制bitmap旋转角度和缩放的矩阵
     int timeout = 400;//双击间格毫秒延时
     long singleClickTime;
+    boolean isShake = true;//是否需要抖动效果 默认抖动
 
     @SuppressLint("HandlerLeak")
     class MyHandler extends Handler {
@@ -70,6 +71,7 @@ public class HeartViewGroup extends ViewGroup {
         super(context, attrs);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.HeartViewGroup);
         bitmap = BitmapFactory.decodeResource(getResources(), typedArray.getResourceId(R.styleable.HeartViewGroup_heart_swipe_image, R.drawable.ic_heart));
+        isShake = typedArray.getBoolean(R.styleable.HeartViewGroup_heart_shake, isShake);
         refreshRate = typedArray.getInt(R.styleable.HeartViewGroup_heart_refresh_rate, refreshRate);
         degreesMin = typedArray.getInt(R.styleable.HeartViewGroup_heart_degrees_interval_min, degreesMin);
         degreesMax = typedArray.getInt(R.styleable.HeartViewGroup_heart_degrees_interval_max, degreesMax);
@@ -291,6 +293,14 @@ public class HeartViewGroup extends ViewGroup {
      */
     public void setSwipeImage(int id) {
         bitmap = BitmapFactory.decodeResource(getResources(), id);
+    }
+    /**
+     * 设置是否抖动一下
+     *  默认抖动
+     * @param isShake true为抖动
+     */
+    public void setShake(boolean isShake) {
+        this.isShake = isShake;
     }
 
     /**

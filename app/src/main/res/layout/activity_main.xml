@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.yqw.hotheart.HeartFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.yqw.hotheart.HeartConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -14,4 +14,4 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/douyin" />
-</com.yqw.hotheart.HeartFrameLayout>
+</com.yqw.hotheart.HeartConstraintLayout>

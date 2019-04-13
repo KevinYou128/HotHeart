@@ -2,6 +2,7 @@
 <resources>
     <declare-styleable name="HeartViewGroup">
         <attr name="heart_swipe_image" format="integer" />
+        <attr name="heart_shake" format="boolean" />
         <attr name="heart_refresh_rate" format="integer" />
         <attr name="heart_degrees_interval_min" format="integer" />
         <attr name="heart_degrees_interval_max" format="integer" />
