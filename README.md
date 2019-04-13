@@ -17,7 +17,7 @@
  添加依赖项
 
 	dependencies {
-		implementation 'com.github.KevinYou128:HotHeart:v1.1'
+		implementation 'com.github.KevinYou128:HotHeart:v1.2'
 	}
 第三步：直接在布局文件里调用
 
@@ -39,26 +39,62 @@
 
 <h3>XML属性说明</h3>
 
-<p> swipe_image：点击时需要显示的图片<br />
+<p> heart_swipe_image：点击时需要显示的图片<br />
  <br />
- refresh_rate：设置动画刷新频率，默认为16，数值越大动画表现越慢，建议使用默认就好了<br />
+ heart_shake：设置是否有抖动效果，默认为抖动，设置false为不抖动<br />
  <br />
- degrees_interval_min：图片最小旋转角度，默认-30，取值范围为-360到360（注意取值小于或等于max）<br />
+ heart_refresh_rate：设置动画刷新频率，默认为16，数值越大动画表现越慢，建议使用默认就好了<br />
  <br />
- degrees_interval_max:图片最大旋转角度，默认30，取值范围为-360到360（注意取值大于或等于min）</p>
+ heart_degrees_interval_min：图片最小旋转角度，默认-30，取值范围为-360到360（注意取值小于或等于max）<br />
+ <br />
+ heart_degrees_interval_max:图片最大旋转角度，默认30，取值范围为-360到360（注意取值大于或等于min）</p>
 <h3>java代码属性说明</h3>
 
 <p> setOnDoubleClickListener：双击事件监听<br />
 <br />
  示例：
 		
-	heartViewGroup.setOnDoubleClickListener(new HeartViewGroup.DoubleClickListener() {
+	heart.setOnDoubleClickListener(new DoubleClickListener() {
             @Override
             public void onDoubleClick(View view) {
                 //双击事件处理
             }
         });
 	
+ 点击事件有两种方案：
+ 
+ 方案一：
+ 
+    //点击监听方案一：解决单击和双击冲突的点击方案（解除注释就可以测试效果了）
+        heart.setOnTouchListener(new MyClickListener
+                (new MyClickListener.MyClickCallBack() {
+
+                    @Override
+                    public void onSimpleClick() {
+                        showToast("单击了");
+                    }
+
+                    @Override
+                    public void onDoubleClick() {
+                        showToast("双击了");
+                    }
+                }));
+ 方案二：
+
+     //点击监听方案二：普通单击双击，单击会一直被调用（解除注释就可以测试效果了）
+        heart.setOnDoubleClickListener(new DoubleClickListener() {
+            @Override
+            public void onDoubleClick(View view) {
+                showToast("双击了");
+
+            }
+        });
+        heart.setOnSimpleClickListener(new SimpleClickListener() {
+            @Override
+            public void onSimpleClick(View view) {
+                showToast("单击了");
+            }
+        });
  <br />
  setSwipeImage(int id)：设置点击时需要显示的图片<br />
  <br />
