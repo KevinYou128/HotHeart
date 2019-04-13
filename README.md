@@ -47,7 +47,7 @@
  <br />
  heart_degrees_interval_min：图片最小旋转角度，默认-30，取值范围为-360到360（注意取值小于或等于max）<br />
  <br />
- heart_degrees_interval_max:图片最大旋转角度，默认30，取值范围为-360到360（注意取值大于或等于min）</p>
+ heart_degrees_interval_max：图片最大旋转角度，默认30，取值范围为-360到360（注意取值大于或等于min）</p>
 <h3>java代码属性说明</h3>
 
 <p> setOnDoubleClickListener：双击事件监听<br />
