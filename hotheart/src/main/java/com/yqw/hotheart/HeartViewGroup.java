@@ -15,6 +15,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.yqw.hotheart.minterface.DoubleClickListener;
+import com.yqw.hotheart.minterface.SimpleClickListener;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -26,6 +29,7 @@ import java.util.Random;
  */
 public class HeartViewGroup extends ViewGroup {
     DoubleClickListener mDoubleClickListener;
+    SimpleClickListener mSimpleClickListener;
 
     List<HeartBean> list;
     int MaxAlpha = 255;//
@@ -65,10 +69,10 @@ public class HeartViewGroup extends ViewGroup {
     public HeartViewGroup(Context context, AttributeSet attrs) {
         super(context, attrs);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.HeartViewGroup);
-        bitmap = BitmapFactory.decodeResource(getResources(), typedArray.getResourceId(R.styleable.HeartViewGroup_swipe_image, R.drawable.ic_heart));
-        refreshRate = typedArray.getInt(R.styleable.HeartViewGroup_refresh_rate, refreshRate);
-        degreesMin = typedArray.getInt(R.styleable.HeartViewGroup_degrees_interval_min, degreesMin);
-        degreesMax = typedArray.getInt(R.styleable.HeartViewGroup_degrees_interval_max, degreesMax);
+        bitmap = BitmapFactory.decodeResource(getResources(), typedArray.getResourceId(R.styleable.HeartViewGroup_heart_swipe_image, R.drawable.ic_heart));
+        refreshRate = typedArray.getInt(R.styleable.HeartViewGroup_heart_refresh_rate, refreshRate);
+        degreesMin = typedArray.getInt(R.styleable.HeartViewGroup_heart_degrees_interval_min, degreesMin);
+        degreesMax = typedArray.getInt(R.styleable.HeartViewGroup_heart_degrees_interval_max, degreesMax);
         typedArray.recycle();
     }
 
@@ -165,11 +169,14 @@ public class HeartViewGroup extends ViewGroup {
                     //调用双击事件
                     if (mDoubleClickListener != null)
                         mDoubleClickListener.onDoubleClick(this);
+                } else {
+                    if (mSimpleClickListener != null)
+                        mSimpleClickListener.onSimpleClick(HeartViewGroup.this);
                 }
                 singleClickTime = newClickTime;
                 break;
         }
-        return true;
+        return false;
     }
 
     /**
@@ -213,17 +220,27 @@ public class HeartViewGroup extends ViewGroup {
     private void Refresh() {
         for (int i = 0; i < list.size(); i++) {
             HeartBean bean = list.get(i);
+            bean.count++;
             if (!START && bean.alpha == 0) {
+                //透明度减为0后，从list里清除
                 list.remove(i);
                 bean.paint = null;
                 continue;
             } else if (START) {
                 START = false;
             }
-            bean.scanle += refreshRate > 16 ? 0.03 : 0.1;//放大倍数 默认0.1
-            bean.alpha -= 10;//透明度
-            if (bean.alpha < 0) {
-                bean.alpha = 0;
+            if (bean.count <= 1) {
+                bean.scanle = 1.9f;//初始为1.9倍大小 步骤A
+            } else if (bean.count <= 6) {
+                bean.scanle -= 0.2;//每次缩小0.2，缩小5帧后为0.9 步骤B
+            } else if (bean.count <= 15) {
+                bean.scanle = 1;//恢复原图大小 步骤C ABC三个步骤主要实现一个初始跳动心心的效果
+            } else {
+                bean.scanle += 0.1;//放大倍数 每次放大0.1
+                bean.alpha -= 10;//透明度
+                if (bean.alpha < 0) {
+                    bean.alpha = 0;
+                }
             }
             bean.paint.setAlpha(bean.alpha);
         }
@@ -248,14 +265,17 @@ public class HeartViewGroup extends ViewGroup {
     }
 
     /**
-     * 接口
+     * 单击接口监听的方法
+     *
+     * @param mSimpleClickListener 单击监听
      */
-    public interface DoubleClickListener {
-        void onDoubleClick(View view);
+    public void setOnSimpleClickListener(
+            final SimpleClickListener mSimpleClickListener) {
+        this.mSimpleClickListener = mSimpleClickListener;
     }
 
     /**
-     * 给Button监听接口的方法
+     * 双击接口监听的方法
      *
      * @param mDoubleClickListener 双击监听
      */
@@ -308,5 +328,4 @@ public class HeartViewGroup extends ViewGroup {
         matrix = null;
         list = null;
     }
-
 }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="HeartViewGroup">
-        <attr name="swipe_image" format="integer" />
-        <attr name="refresh_rate" format="integer" />
-        <attr name="degrees_interval_min" format="integer" />
-        <attr name="degrees_interval_max" format="integer" />
+        <attr name="heart_swipe_image" format="integer" />
+        <attr name="heart_refresh_rate" format="integer" />
+        <attr name="heart_degrees_interval_min" format="integer" />
+        <attr name="heart_degrees_interval_max" format="integer" />
     </declare-styleable>
 </resources>
