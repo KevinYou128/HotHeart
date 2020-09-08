@@ -282,18 +282,18 @@ public class HeartFrameLayout extends FrameLayout {
         degreesMin = min;
         degreesMax = max;
     }
-
+    public void destory
     /**
      * viewGroup销毁时释放资源
      */
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        handler = null;
-        if (bitmap != null)
-            bitmap.recycle();
-        bitmap = null;
-        matrix = null;
-        list = null;
+//         handler = null;
+//         if (bitmap != null)
+//             bitmap.recycle();
+//         bitmap = null;
+//         matrix = null;
+//         list = null;
     }
 }
