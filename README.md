@@ -17,7 +17,7 @@
  添加依赖项
 
 	dependencies {
-		implementation 'com.github.KevinYou128:HotHeart:v1.2'
+		implementation 'com.github.KevinYou128:HotHeart:v1.2.3'
 	}
 第三步：直接在布局文件里调用
 
