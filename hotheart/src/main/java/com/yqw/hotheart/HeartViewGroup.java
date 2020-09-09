@@ -156,11 +156,8 @@ public class HeartViewGroup extends ViewGroup {
     }
 
 
-    @SuppressLint("ClickableViewAccessibility")
     @Override
-    public boolean onTouchEvent(final MotionEvent event) {
-        super.onTouchEvent(event);
-
+    public boolean dispatchTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 long newClickTime = System.currentTimeMillis();
@@ -171,14 +168,18 @@ public class HeartViewGroup extends ViewGroup {
                     //调用双击事件
                     if (mDoubleClickListener != null)
                         mDoubleClickListener.onDoubleClick(this);
+                    return false;
                 } else {
                     if (mSimpleClickListener != null)
                         mSimpleClickListener.onSimpleClick(HeartViewGroup.this);
                 }
                 singleClickTime = newClickTime;
                 break;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_MOVE:
+                return super.dispatchTouchEvent(event);
         }
-        return false;
+        return super.dispatchTouchEvent(event);
     }
 
     /**
@@ -326,16 +327,22 @@ public class HeartViewGroup extends ViewGroup {
     }
 
     /**
-     * viewGroup销毁时释放资源
+     * 需要销毁时调用
      */
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
+    public void destroy() {
         handler = null;
         if (bitmap != null)
             bitmap.recycle();
         bitmap = null;
         matrix = null;
         list = null;
+    }
+
+    /**
+     * viewGroup销毁时释放资源
+     */
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
     }
 }

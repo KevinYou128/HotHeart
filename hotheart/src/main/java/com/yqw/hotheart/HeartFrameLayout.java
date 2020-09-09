@@ -27,21 +27,21 @@ import java.util.Random;
  *  Created by YQW on 2019/4/12.
  */
 public class HeartFrameLayout extends FrameLayout {
-    DoubleClickListener mDoubleClickListener;
-    SimpleClickListener mSimpleClickListener;
+    private DoubleClickListener mDoubleClickListener;
+    private SimpleClickListener mSimpleClickListener;
 
-    List<HeartBean> list;//存放多个心形图
-    int MaxAlpha = 255;//透明度，默认为255，0为消失不可见
-    boolean START = true;//true为开始动画，false为结束动画
-    int refreshRate = 16;//动画刷新频率
-    int degreesMin = -30;//最小旋转角度
-    int degreesMax = 30;//最大旋转角度
-    MyHandler handler = new MyHandler();
-    Bitmap bitmap;//初始图片
-    Matrix matrix = new Matrix();//控制bitmap旋转角度和缩放的矩阵
-    int timeout = 400;//双击间格毫秒延时
-    long singleClickTime;//记录第一次点击的时间
-    boolean isShake = true;//是否需要抖动效果 默认抖动
+    private List<HeartBean> list;//存放多个心形图
+    private int MaxAlpha = 255;//透明度，默认为255，0为消失不可见
+    private boolean START = true;//true为开始动画，false为结束动画
+    private int refreshRate = 16;//动画刷新频率
+    private int degreesMin = -30;//最小旋转角度
+    private int degreesMax = 30;//最大旋转角度
+    private MyHandler handler = new MyHandler();
+    private Bitmap bitmap;//初始图片
+    private Matrix matrix = new Matrix();//控制bitmap旋转角度和缩放的矩阵
+    private int timeout = 400;//双击间格毫秒延时
+    private long singleClickTime;//记录第一次点击的时间
+    private boolean isShake = true;//是否需要抖动效果 默认抖动
 
     @SuppressLint("HandlerLeak")
     class MyHandler extends Handler {
@@ -77,13 +77,17 @@ public class HeartFrameLayout extends FrameLayout {
         typedArray.recycle();
     }
 
-    {
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
         //初始化
-        list = new ArrayList<>();
+        if (list == null) {
+            list = new ArrayList<>();
+        }
+//        if (bitmap == null)
 //        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_heart);
         singleClickTime = System.currentTimeMillis();
     }
-
 
     @Override
     protected void dispatchDraw(Canvas canvas) {
@@ -112,12 +116,8 @@ public class HeartFrameLayout extends FrameLayout {
         }
     }
 
-
-    @SuppressLint("ClickableViewAccessibility")
     @Override
-    public boolean onTouchEvent(final MotionEvent event) {
-        super.onTouchEvent(event);
-
+    public boolean dispatchTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 long newClickTime = System.currentTimeMillis();
@@ -128,15 +128,44 @@ public class HeartFrameLayout extends FrameLayout {
                     //调用双击事件
                     if (mDoubleClickListener != null)
                         mDoubleClickListener.onDoubleClick(this);
+                    return false;
                 } else {
                     if (mSimpleClickListener != null)
                         mSimpleClickListener.onSimpleClick(HeartFrameLayout.this);
                 }
                 singleClickTime = newClickTime;
                 break;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_MOVE:
+                return super.dispatchTouchEvent(event);
         }
-        return false;
+        return super.dispatchTouchEvent(event);
     }
+
+//    @SuppressLint("ClickableViewAccessibility")
+//    @Override
+//    public boolean onTouchEvent(final MotionEvent event) {
+//        super.onTouchEvent(event);
+//
+//        switch (event.getAction()) {
+//            case MotionEvent.ACTION_DOWN:
+//                long newClickTime = System.currentTimeMillis();
+//                //双击以上事件都会调用心动动画
+//                if (newClickTime - singleClickTime < timeout) {
+//                    //开始心动动画
+//                    startSwipe(event);
+//                    //调用双击事件
+//                    if (mDoubleClickListener != null)
+//                        mDoubleClickListener.onDoubleClick(this);
+//                } else {
+//                    if (mSimpleClickListener != null)
+//                        mSimpleClickListener.onSimpleClick(HeartFrameLayout.this);
+//                }
+//                singleClickTime = newClickTime;
+//                break;
+//        }
+//        return false;
+//    }
 
     /**
      * 初始化paint
@@ -162,7 +191,6 @@ public class HeartFrameLayout extends FrameLayout {
         bean.Y = (int) event.getY(); //
         bean.paint = initPaint(bean.alpha);
         bean.degrees = degrees(degreesMin, degreesMax);
-
         if (list.size() == 0) {
             START = true;
         }
@@ -254,7 +282,8 @@ public class HeartFrameLayout extends FrameLayout {
 
     /**
      * 设置是否抖动一下
-     *  默认抖动
+     * 默认抖动
+     *
      * @param isShake true为抖动
      */
     public void setShake(boolean isShake) {
@@ -282,18 +311,19 @@ public class HeartFrameLayout extends FrameLayout {
         degreesMin = min;
         degreesMax = max;
     }
-    
+
     /**
-    * 需要开发者主动在合适的时机调用这个
-    */
+     * 需要销毁时调用
+     */
     public void destroy() {
         handler = null;
         if (bitmap != null)
             bitmap.recycle();
         bitmap = null;
         matrix = null;
-        list = null;       
+        list = null;
     }
+
     /**
      * viewGroup销毁时释放资源
      */
@@ -301,4 +331,5 @@ public class HeartFrameLayout extends FrameLayout {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
     }
+
 }
