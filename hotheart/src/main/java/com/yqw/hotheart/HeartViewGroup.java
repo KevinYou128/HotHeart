@@ -15,8 +15,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.yqw.hotheart.minterface.DoubleClickListener;
-import com.yqw.hotheart.minterface.SimpleClickListener;
+import com.yqw.hotheart.minterface.OnDoubleClickListener;
+import com.yqw.hotheart.minterface.OnSimpleClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,40 +25,41 @@ import java.util.Random;
 /***
  *
  *  抖音点击出现爱心的效果
- *  Created by YQW on 2019/4/11.
+ *  Created by YQW on 2019/4/12.
  */
 public class HeartViewGroup extends ViewGroup {
-    DoubleClickListener mDoubleClickListener;
-    SimpleClickListener mSimpleClickListener;
+    //    private static final String TAG = "HeartFrameLayout";
+    private OnDoubleClickListener mOnDoubleClickListener;
+    private OnSimpleClickListener mOnSimpleClickListener;
 
-    List<HeartBean> list;
-    int MaxAlpha = 255;//
-    boolean START = true;//true为开始动画，false为结束动画
-    int refreshRate = 16;//动画刷新频率
-    int degreesMin = -30;//最小旋转角度
-    int degreesMax = 30;//最大旋转角度
-    MyHandler handler = new MyHandler();
-    Bitmap bitmap;//初始图片
-    Matrix matrix = new Matrix();//控制bitmap旋转角度和缩放的矩阵
-    int timeout = 400;//双击间格毫秒延时
-    long singleClickTime;
-    boolean isShake = true;//是否需要抖动效果 默认抖动
+    private List<HeartBean> list;//存放多个心形图
+    private boolean START = true;//true为开始动画，false为结束动画
+    private int refreshRate = 16;//动画刷新频率
+    private int degreesMin = -30;//最小旋转角度
+    private int degreesMax = 30;//最大旋转角度
+    private MyHandler handler;
+    private Bitmap bitmap;//初始图片
+    private Matrix matrix;//控制bitmap旋转角度和缩放的矩阵
+    private long singleClickTime;//记录第一次点击的时间
+    private boolean isShake = true;//是否需要抖动效果 默认抖动
+
+    private int clickCount = 1;//记录连续点击次数
+    private boolean isDoubleClick;
+
+    private Context mContext;
+    private AttributeSet mAttributeSet;
 
     @SuppressLint("HandlerLeak")
     class MyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch (msg.what) {
-                case 0:
-                    Refresh();
-                    invalidate();
-                    if (list != null && list.size() > 0) {
-                        sendEmptyMessageDelayed(0, refreshRate);// 延时
-                    }
-                    break;
-                default:
-                    break;
+            if (msg.what == 0) {
+                Refresh();
+                invalidate();
+                if (list != null && list.size() > 0) {
+                    sendEmptyMessageDelayed(0, refreshRate);// 延时
+                }
             }
         }
     }
@@ -69,20 +70,26 @@ public class HeartViewGroup extends ViewGroup {
 
     public HeartViewGroup(Context context, AttributeSet attrs) {
         super(context, attrs);
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.HeartViewGroup);
+        mContext = context;
+        mAttributeSet = attrs;
+
+        init();
+    }
+
+    public void init() {
+        TypedArray typedArray = mContext.obtainStyledAttributes(mAttributeSet, R.styleable.HeartViewGroup);
         bitmap = BitmapFactory.decodeResource(getResources(), typedArray.getResourceId(R.styleable.HeartViewGroup_heart_swipe_image, R.drawable.ic_heart));
         isShake = typedArray.getBoolean(R.styleable.HeartViewGroup_heart_shake, isShake);
         refreshRate = typedArray.getInt(R.styleable.HeartViewGroup_heart_refresh_rate, refreshRate);
         degreesMin = typedArray.getInt(R.styleable.HeartViewGroup_heart_degrees_interval_min, degreesMin);
         degreesMax = typedArray.getInt(R.styleable.HeartViewGroup_heart_degrees_interval_max, degreesMax);
-        typedArray.recycle();
-    }
+        handler = new MyHandler();
+        matrix = new Matrix();
+        if (list == null) {
+            list = new ArrayList<>();
+        }
 
-    {
-        //初始化
-        list = new ArrayList<>();
-//        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_heart);
-        singleClickTime = System.currentTimeMillis();
+        typedArray.recycle();
     }
 
     /**
@@ -129,6 +136,15 @@ public class HeartViewGroup extends ViewGroup {
     }
 
     @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        //初始化
+        init();
+
+        singleClickTime = System.currentTimeMillis();
+    }
+
+    @Override
     protected void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
         for (int i = 0; i < list.size(); i++) {
@@ -155,31 +171,45 @@ public class HeartViewGroup extends ViewGroup {
         }
     }
 
-
+    @SuppressLint("ClickableViewAccessibility")
     @Override
-    public boolean dispatchTouchEvent(MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                long newClickTime = System.currentTimeMillis();
-                //双击以上事件都会调用心动动画
-                if (newClickTime - singleClickTime < timeout) {
-                    //开始心动动画
-                    startSwipe(event);
-                    //调用双击事件
-                    if (mDoubleClickListener != null)
-                        mDoubleClickListener.onDoubleClick(this);
-                    return false;
-                } else {
-                    if (mSimpleClickListener != null)
-                        mSimpleClickListener.onSimpleClick(HeartViewGroup.this);
-                }
-                singleClickTime = newClickTime;
-                break;
-            case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_MOVE:
-                return super.dispatchTouchEvent(event);
+    public boolean onTouchEvent(MotionEvent event) {
+        super.onTouchEvent(event);
+        //双击间格毫秒延时
+        final int timeout = 200;
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            long newClickTime = System.currentTimeMillis();
+            //双击以上事件都会调用心动动画
+            if (newClickTime - singleClickTime < timeout) {
+                //开始心动动画
+                startSwipe(event);
+                //调用双击事件
+                if (mOnDoubleClickListener != null)
+                    mOnDoubleClickListener.onDoubleClick(this);
+                isDoubleClick = true;
+                clickCount++;
+//                Log.d(TAG, "连击次数 clickCount = " + clickCount);
+            } else {
+                isDoubleClick = false;
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(timeout);
+                            if (mOnSimpleClickListener != null && !isDoubleClick) {
+                                //调用单击事件
+                                mOnSimpleClickListener.onSimpleClick(getRootView());
+                                clickCount = 1;
+                            }
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
+            }
+            singleClickTime = newClickTime;
         }
-        return super.dispatchTouchEvent(event);
+        return false;
     }
 
     /**
@@ -201,12 +231,13 @@ public class HeartViewGroup extends ViewGroup {
         //
         HeartBean bean = new HeartBean();
         bean.scanle = 1; //
-        bean.alpha = MaxAlpha; //
+        //透明度，默认为255，0为消失不可见
+        int maxAlpha = 255;
+        bean.alpha = maxAlpha; //
         bean.X = (int) event.getX(); //
         bean.Y = (int) event.getY(); //
         bean.paint = initPaint(bean.alpha);
         bean.degrees = degrees(degreesMin, degreesMax);
-
         if (list.size() == 0) {
             START = true;
         }
@@ -221,6 +252,9 @@ public class HeartViewGroup extends ViewGroup {
      * 刷新
      */
     private void Refresh() {
+        if (list == null) {
+            list = new ArrayList<>();
+        }
         for (int i = 0; i < list.size(); i++) {
             HeartBean bean = list.get(i);
             bean.count++;
@@ -232,11 +266,11 @@ public class HeartViewGroup extends ViewGroup {
             } else if (START) {
                 START = false;
             }
-            if (bean.count <= 1) {
+            if (bean.count <= 1 && isShake) {
                 bean.scanle = 1.9f;//初始为1.9倍大小 步骤A
-            } else if (bean.count <= 6) {
+            } else if (bean.count <= 6 && isShake) {
                 bean.scanle -= 0.2;//每次缩小0.2，缩小5帧后为0.9 步骤B
-            } else if (bean.count <= 15) {
+            } else if (bean.count <= 15 && isShake) {
                 bean.scanle = 1;//恢复原图大小 步骤C ABC三个步骤主要实现一个初始跳动心心的效果
             } else {
                 bean.scanle += 0.1;//放大倍数 每次放大0.1
@@ -270,21 +304,21 @@ public class HeartViewGroup extends ViewGroup {
     /**
      * 单击接口监听的方法
      *
-     * @param mSimpleClickListener 单击监听
+     * @param mOnSimpleClickListener 单击监听
      */
     public void setOnSimpleClickListener(
-            final SimpleClickListener mSimpleClickListener) {
-        this.mSimpleClickListener = mSimpleClickListener;
+            final OnSimpleClickListener mOnSimpleClickListener) {
+        this.mOnSimpleClickListener = mOnSimpleClickListener;
     }
 
     /**
      * 双击接口监听的方法
      *
-     * @param mDoubleClickListener 双击监听
+     * @param mOnDoubleClickListener 双击监听
      */
     public void setOnDoubleClickListener(
-            final DoubleClickListener mDoubleClickListener) {
-        this.mDoubleClickListener = mDoubleClickListener;
+            final OnDoubleClickListener mOnDoubleClickListener) {
+        this.mOnDoubleClickListener = mOnDoubleClickListener;
     }
 
     /**
@@ -295,9 +329,11 @@ public class HeartViewGroup extends ViewGroup {
     public void setSwipeImage(int id) {
         bitmap = BitmapFactory.decodeResource(getResources(), id);
     }
+
     /**
      * 设置是否抖动一下
-     *  默认抖动
+     * 默认抖动
+     *
      * @param isShake true为抖动
      */
     public void setShake(boolean isShake) {
@@ -329,7 +365,7 @@ public class HeartViewGroup extends ViewGroup {
     /**
      * 需要销毁时调用
      */
-    public void destroy() {
+    private void destroy() {
         handler = null;
         if (bitmap != null)
             bitmap.recycle();
@@ -344,5 +380,11 @@ public class HeartViewGroup extends ViewGroup {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        destroy();
+    }
+
+    @Override
+    protected void detachViewFromParent(int index) {
+        super.detachViewFromParent(index);
     }
 }

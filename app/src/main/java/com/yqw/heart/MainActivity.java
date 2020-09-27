@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
 //        mHeartFrameLayout = findViewById(R.id.heartlayout);
         mRecyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 1));
 
-        for (int i = 0;i<30;i++){
+        for (int i = 0;i<300;i++){
             datas.add(""+i);
         }
 
@@ -44,32 +44,15 @@ public class MainActivity extends AppCompatActivity {
 
 //        HeartFrameLayout heartFrameLayout = findViewById(R.id.heart);
 
-//        //点击监听方案一：解决单击和双击冲突的点击方案（解除注释就可以测试效果了）
-//        heartFrameLayout.setOnTouchListener(new MyClickListener
-//                (new MyClickListener.MyClickCallBack() {
-//
-//                    @Override
-//                    public void onSimpleClick() {
-//                        showToast("单击了");
-//                    }
-//
-//                    @Override
-//                    public void onDoubleClick() {
-//                        showToast("双击了");
-//                    }
-//                }));
-
-        //============== 华丽的分割线 ==================
-
-//        //点击监听方案二：普通单击双击，单击会一直被调用（解除注释就可以测试效果了）
-//        heartFrameLayout.setOnDoubleClickListener(new DoubleClickListener() {
+//        heartFrameLayout.setOnDoubleClickListener(new OnDoubleClickListener() {
 //            @Override
 //            public void onDoubleClick(View view) {
 //                showToast("双击了");
 //
 //            }
 //        });
-//        heartFrameLayout.setOnSimpleClickListener(new SimpleClickListener() {
+
+//        heartFrameLayout.setOnSimpleClickListener(new OnSimpleClickListener() {
 //            @Override
 //            public void onSimpleClick(View view) {
 //                showToast("单击了");
@@ -84,6 +67,5 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        mHeartFrameLayout.destroy();
     }
 }

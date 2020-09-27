@@ -14,4 +14,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/douyin" />
+    <Button
+        android:id="@+id/bt_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="点赞"
+        />
 </com.yqw.hotheart.HeartFrameLayout>

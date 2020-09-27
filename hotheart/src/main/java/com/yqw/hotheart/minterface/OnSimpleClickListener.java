@@ -5,6 +5,6 @@ import android.view.View;
 /**
  * 单击接口
  */
-public interface SimpleClickListener {
+public interface OnSimpleClickListener {
     void onSimpleClick(View view);
 }

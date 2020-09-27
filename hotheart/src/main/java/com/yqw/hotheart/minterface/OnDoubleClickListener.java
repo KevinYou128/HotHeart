@@ -5,6 +5,6 @@ import android.view.View;
 /**
  * 接口
  */
-public interface DoubleClickListener {
+public interface OnDoubleClickListener {
     void onDoubleClick(View view);
 }

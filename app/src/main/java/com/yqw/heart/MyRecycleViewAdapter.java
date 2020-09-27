@@ -2,9 +2,15 @@ package com.yqw.heart;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+
+import com.yqw.hotheart.HeartFrameLayout;
+import com.yqw.hotheart.minterface.OnDoubleClickListener;
+import com.yqw.hotheart.minterface.OnSimpleClickListener;
 
 import java.util.List;
 
@@ -46,8 +52,31 @@ public class MyRecycleViewAdapter extends RecyclerView.Adapter<MyRecycleViewAdap
         return mData.size();
     }
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        HeartFrameLayout mHeartFrameLayout;
+        Button mButton;
         ViewHolder(View itemView) {
             super(itemView);
+            mHeartFrameLayout = itemView.findViewById(R.id.heart);
+
+            mHeartFrameLayout.setOnDoubleClickListener(new OnDoubleClickListener() {
+                @Override
+                public void onDoubleClick(View view) {
+                    Log.d("yqw","onDoubleClick");
+                }
+            });
+            mHeartFrameLayout.setOnSimpleClickListener(new OnSimpleClickListener() {
+                @Override
+                public void onSimpleClick(View view) {
+                    Log.d("yqw","onSimpleClick");
+                }
+            });
+            mButton = itemView.findViewById(R.id.bt_start);
+            mButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d("yqw","点赞");
+                }
+            });
         }
         @Override
         public void onClick(View view) {

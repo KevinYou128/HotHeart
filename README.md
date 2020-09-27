@@ -54,42 +54,23 @@
 <br />
  示例：
 		
-	heart.setOnDoubleClickListener(new DoubleClickListener() {
+	heart.setOnDoubleClickListener(new OnDoubleClickListener() {
             @Override
             public void onDoubleClick(View view) {
                 //双击事件处理
             }
         });
 	
- 点击事件有两种方案：
- 
- 方案一：
- 
-    //点击监听方案一：解决单击和双击冲突的点击方案
-        heart.setOnTouchListener(new MyClickListener
-                (new MyClickListener.MyClickCallBack() {
+ 点击事件：
 
-                    @Override
-                    public void onSimpleClick() {
-                        showToast("单击了");
-                    }
-
-                    @Override
-                    public void onDoubleClick() {
-                        showToast("双击了");
-                    }
-                }));
- 方案二：
-
-     //点击监听方案二：普通单击双击，单击会一直被调用
-        heart.setOnDoubleClickListener(new DoubleClickListener() {
+        heart.setOnDoubleClickListener(new OnDoubleClickListener() {
             @Override
             public void onDoubleClick(View view) {
                 showToast("双击了");
 
             }
         });
-        heart.setOnSimpleClickListener(new SimpleClickListener() {
+        heart.setOnSimpleClickListener(new OnSimpleClickListener() {
             @Override
             public void onSimpleClick(View view) {
                 showToast("单击了");
